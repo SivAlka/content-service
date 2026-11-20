@@ -6,6 +6,6 @@ const apiTarget = process.env.VITE_API_TARGET ?? 'http://localhost:3001';
 
 export default defineConfig({
   plugins: [vue()],
-  server: { port: 5173, proxy: { '/api': apiTarget } },
+  server: { port: Number(process.env.WEB_PORT ?? 5173), strictPort: true, proxy: { '/api': apiTarget } },
   test: { environment: 'jsdom' },
 });

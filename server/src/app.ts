@@ -19,12 +19,25 @@ function send(res: Response, article: Article, status = 200) {
   res.status(status).setHeader('ETag', `"${article.version}"`).json(article);
 }
 
-export function createApp(store: ContentStore) {
+export interface AppOptions {
+  /** When provided, mounts POST /api/test/reset (never enable in production). */
+  onReset?: (opts: { seed: boolean }) => void;
+}
+
+export function createApp(store: ContentStore, options: AppOptions = {}) {
   const app = express();
   app.use(cors({ exposedHeaders: ['ETag'] })); // open access: any origin, no auth
   app.use(express.json({ limit: '1mb' }));
 
   app.get('/api/health', (_req, res) => res.json({ ok: true }));
+
+  if (options.onReset) {
+    // Test support: deterministic state for automation. Body: { "seed": boolean } (default true).
+    app.post('/api/test/reset', (req, res) => {
+      options.onReset!({ seed: req.body?.seed !== false });
+      res.json({ ok: true, total: store.stats().total });
+    });
+  }
 
   app.get('/api/stats', (_req, res) => res.json(store.stats()));
 

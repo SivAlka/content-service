@@ -178,6 +178,11 @@ export class ContentStore {
     return { total: this.articles.size, byStatus, byBrand, topTags };
   }
 
+  clear() {
+    this.articles.clear();
+    this.revisions.clear();
+  }
+
   /** Test/seed helper: insert a fully-formed article. */
   insertRaw(article: Article, revs: Revision[] = []) {
     this.articles.set(article.id, article);

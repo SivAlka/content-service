@@ -12,7 +12,13 @@ const store = new ContentStore();
 if (process.env.SEED !== 'false') seed(store);
 startScheduler(store, Number(process.env.SCHEDULER_INTERVAL_MS ?? 15_000));
 
-const app = createApp(store);
+const app = createApp(store, {
+  // Enabled by default for local/test use; set ENABLE_TEST_ROUTES=false to turn off.
+  onReset: process.env.ENABLE_TEST_ROUTES === 'false' ? undefined : ({ seed: doSeed }) => {
+    store.clear();
+    if (doSeed) seed(store);
+  },
+});
 
 // After `npm run build`, serve the built UI from the same port (single-process mode).
 const webDist = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../web/dist');

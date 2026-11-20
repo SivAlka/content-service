@@ -3,5 +3,5 @@ import type { Status } from '../types';
 defineProps<{ status: Status }>();
 </script>
 <template>
-  <span class="badge" :class="status">{{ status.replace('_', ' ') }}</span>
+  <span data-testid="status-badge" class="badge" :class="status">{{ status.replace('_', ' ') }}</span>
 </template>

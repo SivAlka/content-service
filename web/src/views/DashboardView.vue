@@ -16,8 +16,8 @@ onMounted(async () => {
   <p v-else-if="!stats">Loading…</p>
   <template v-else>
     <div class="grid">
-      <div class="card"><div class="muted">Total</div><div class="stat">{{ stats.total }}</div></div>
-      <div v-for="(n, s) in stats.byStatus" :key="s" class="card">
+      <div class="card"><div class="muted">Total</div><div class="stat" data-testid="stat-total">{{ stats.total }}</div></div>
+      <div v-for="(n, s) in stats.byStatus" :key="s" class="card" :data-testid="`stat-${s}`">
         <div class="muted">{{ s.replace('_', ' ') }}</div><div class="stat">{{ n }}</div>
       </div>
     </div>

@@ -55,22 +55,22 @@ watch(
 <template>
   <h1>Articles</h1>
   <div class="card row">
-    <input v-model="search" type="search" placeholder="Search title, tags, body…" aria-label="Search" />
-    <select :value="status" aria-label="Status filter" @change="setQuery({ status: ($event.target as HTMLSelectElement).value, page: 1 })">
+    <input v-model="search" data-testid="search-input" type="search" placeholder="Search title, tags, body…" aria-label="Search" />
+    <select :value="status" data-testid="status-filter" aria-label="Status filter" @change="setQuery({ status: ($event.target as HTMLSelectElement).value, page: 1 })">
       <option value="">All statuses</option>
       <option v-for="s in STATUSES" :key="s" :value="s">{{ s.replace('_', ' ') }}</option>
     </select>
     <span v-if="tag" class="tag">tag: {{ tag }} <a href="#" @click.prevent="setQuery({ tag: undefined, page: 1 })">×</a></span>
   </div>
 
-  <p v-if="error" class="error">{{ error }}</p>
+  <p v-if="error" class="error" data-testid="list-error">{{ error }}</p>
   <div class="card">
     <p v-if="loading && !data">Loading…</p>
-    <table v-else-if="data && data.items.length">
+    <table data-testid="article-table" v-else-if="data && data.items.length">
       <thead><tr><th>Title</th><th>Status</th><th>Brand</th><th>Author</th><th>Updated</th></tr></thead>
       <tbody>
-        <tr v-for="a in data.items" :key="a.id">
-          <td><RouterLink :to="`/articles/${a.id}`">{{ a.title }}</RouterLink>
+        <tr v-for="a in data.items" :key="a.id" data-testid="article-row">
+          <td><RouterLink data-testid="article-link" :to="`/articles/${a.id}`">{{ a.title }}</RouterLink>
             <div><span v-for="t in a.tags" :key="t" class="tag">{{ t }}</span></div></td>
           <td><StatusBadge :status="a.status" /></td>
           <td>{{ a.brand }}</td>
@@ -79,10 +79,10 @@ watch(
         </tr>
       </tbody>
     </table>
-    <p v-else>No articles match.</p>
+    <p v-else data-testid="empty-state">No articles match.</p>
   </div>
   <div class="row" v-if="data">
     <Pagination :page="data.page" :total-pages="data.totalPages" @change="(p) => setQuery({ page: p })" />
-    <span class="muted">{{ data.total }} result(s)</span>
+    <span class="muted" data-testid="result-count">{{ data.total }} result(s)</span>
   </div>
 </template>

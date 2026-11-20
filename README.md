@@ -10,7 +10,8 @@ There is no auth, no database and no external services: everything runs locally 
 ```
 content-service/
 ├── server/   Express API (TypeScript, zod, in-memory store, vitest + supertest)
-└── web/      Vue 3 SPA (Vite, vue-router, vitest + @vue/test-utils)
+├── web/      Vue 3 SPA (Vite, vue-router, vitest + @vue/test-utils)
+└── e2e/      Playwright UI + API automation suite (page objects, fixtures, reference tests)
 ```
 
 ## Prerequisites
@@ -45,6 +46,8 @@ npm start            # serves API + built UI together on http://localhost:3001
 | --- | --- |
 | `npm run dev` | API (tsx watch) and UI (Vite) together |
 | `npm test` | Runs server and web unit tests |
+| `npm run test:e2e` | Playwright suite (starts its own API on :3101 and UI on :5273) |
+| `npm run test:e2e:ui` | Same, in Playwright's interactive UI mode |
 | `npm run typecheck` | `tsc` for the server, `vue-tsc` for the web app |
 | `npm run build` | Production build of both |
 | `npm run dev -w server` / `npm run dev -w web` | Run only one side |
@@ -57,6 +60,25 @@ npm start            # serves API + built UI together on http://localhost:3001
 | `SEED` | `true` | Set `false` to start with an empty store |
 | `SCHEDULER_INTERVAL_MS` | `15000` | How often scheduled articles are checked for publishing |
 | `VITE_API_TARGET` | `http://localhost:3001` | Where the Vite dev proxy sends `/api` |
+
+## Test automation (Playwright)
+
+```bash
+npm install
+npm run install:browsers -w e2e   # one-time: downloads Chromium
+npm run test:e2e                  # runs the api + ui projects headless
+npm run test:e2e:ui               # interactive mode (time-travel, locator picker)
+npx playwright show-report e2e/playwright-report
+```
+
+- `e2e/playwright.config.ts` boots the API and UI itself on separate ports (3101 / 5273), so it never collides with `npm run dev`.
+  The scheduler polls every 1 s there, so scheduled articles publish almost immediately.
+- All interactive elements carry a `data-testid`; prefer those (or roles/labels) over CSS selectors.
+- **Test data**: `POST /api/test/reset` with `{ "seed": false }` (empty) or `{ "seed": true }` (~32 sample articles).
+  Disable it with `ENABLE_TEST_ROUTES=false`. `e2e/support/api.ts` has helpers to create articles in a given status quickly via the API.
+- `e2e/pages/` holds page objects, `e2e/support/fixtures.ts` the shared fixtures, and `e2e/tests/{ui,api}/` the specs
+  (one reference test in each to show conventions).
+- The app shares one in-memory store, so the suite runs with a single worker.
 
 ## Domain overview
 
