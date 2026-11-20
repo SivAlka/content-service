@@ -1,0 +1,26 @@
+:root { font-family: system-ui, sans-serif; color: #1f2430; background: #f6f7f9; }
+* { box-sizing: border-box; }
+body { margin: 0; }
+main { max-width: 1000px; margin: 0 auto; padding: 1.25rem; }
+.topbar { display: flex; justify-content: space-between; align-items: center; padding: .75rem 1.25rem; background: #1f2430; color: #fff; }
+.topbar nav { display: flex; gap: 1rem; align-items: center; }
+.topbar a { color: #cfd6e6; text-decoration: none; }
+.topbar a.router-link-exact-active { color: #fff; font-weight: 600; }
+.card { background: #fff; border: 1px solid #e3e6ec; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; }
+.row { display: flex; gap: .75rem; flex-wrap: wrap; align-items: center; }
+input, select, textarea { font: inherit; padding: .45rem .6rem; border: 1px solid #c9cfdb; border-radius: 6px; background: #fff; }
+textarea { width: 100%; min-height: 220px; }
+label { display: block; font-size: .85rem; font-weight: 600; margin: .75rem 0 .25rem; }
+.btn { font: inherit; padding: .45rem .9rem; border-radius: 6px; border: 1px solid #c9cfdb; background: #fff; cursor: pointer; text-decoration: none; color: inherit; }
+.btn.primary { background: #3b6df0; border-color: #3b6df0; color: #fff; }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+table { width: 100%; border-collapse: collapse; }
+th, td { text-align: left; padding: .5rem; border-bottom: 1px solid #eceff4; }
+.badge { padding: .1rem .5rem; border-radius: 999px; font-size: .75rem; background: #e8ecf5; }
+.badge.published { background: #d5f3df; } .badge.scheduled { background: #fff1c9; } .badge.archived { background: #e5e5e5; }
+.badge.in_review { background: #dce9ff; } .badge.approved { background: #e5dcff; }
+.error { background: #fde8e8; border: 1px solid #f3b4b4; padding: .6rem .8rem; border-radius: 6px; margin: .75rem 0; }
+.muted { color: #667085; font-size: .85rem; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: .75rem; }
+.stat { font-size: 1.75rem; font-weight: 700; }
+.tag { display: inline-block; margin-right: .25rem; padding: 0 .4rem; border-radius: 4px; background: #eef1f7; font-size: .8rem; }
